@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
@@ -13,15 +11,26 @@ public class PlayerAttack : MonoBehaviour
 
     void Update()
     {
-        Vector3 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-        float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0f, 0f, rotZ + offset);
-
         if (timeBtwShots <= 0)
         {
             if (Input.GetKey(KeyCode.LeftArrow))
             {
-                Instantiate(Bubble, shotPoint.position, transform.rotation);
+                Instantiate(Bubble, shotPoint.position, Quaternion.Euler(Vector3.forward * 90f));
+                timeBtwShots = startTimeBtwShots;
+            }
+            else if (Input.GetKey(KeyCode.UpArrow))
+            {
+                Instantiate(Bubble, shotPoint.position, Quaternion.Euler(Vector3.zero));
+                timeBtwShots = startTimeBtwShots;
+            }
+            else if (Input.GetKey(KeyCode.RightArrow))
+            {
+                Instantiate(Bubble, shotPoint.position, Quaternion.Euler(Vector3.forward * -90f));
+                timeBtwShots = startTimeBtwShots;
+            }
+            else if (Input.GetKey(KeyCode.DownArrow))
+            {
+                Instantiate(Bubble, shotPoint.position, Quaternion.Euler(Vector3.forward * 180f));
                 timeBtwShots = startTimeBtwShots;
             }
         }
