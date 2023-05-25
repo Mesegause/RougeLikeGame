@@ -1,5 +1,5 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Bubble : MonoBehaviour
@@ -9,18 +9,35 @@ public class Bubble : MonoBehaviour
     public float distance;
     public int damage;
     public LayerMask whatIsSolid;
-    
+
+    private void Awake()
+    {
+        IEnumerator DestroyAfterTime(float time)
+        {
+            yield return new WaitForSeconds(time);
+            
+            DestroyBubble();
+        }
+
+        StartCoroutine(DestroyAfterTime(10f));
+    }
+
     private void Update()
     {
-        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, transform.up, distance, whatIsSolid);
-        if (hitInfo.collider != null)
-        {
-            if (hitInfo.collider.CompareTag("Enemy"))
-            {
-                hitInfo.collider.GetComponent<Enemy>().TakeDamage(damage);
-            }
-            //Destroy(gameObject);
-        }
-        transform.Translate(Vector2.up * speed * Time.deltaTime);
+        transform.Translate(transform.up * speed * Time.deltaTime, Space.World);
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.tag is not "Enemy")
+            return;
+        
+        other.gameObject.GetComponent<Enemy>().TakeDamage(damage);
+        DestroyBubble();
+    }
+
+    private void DestroyBubble()
+    {
+        Destroy(gameObject);
     }
 }

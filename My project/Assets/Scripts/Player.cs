@@ -17,9 +17,18 @@ public class Player : MonoBehaviour
     
     private void Update()
     {
-        transform.position += new Vector3(speed, 0, 0) * Input.GetAxis("Horizontal");
-        transform.position += new Vector3(0, speed, 0) * Input.GetAxis("Vertical");
-
+        if (Input.GetKey(KeyCode.W)) 
+            transform.position += new Vector3(0, speed, 0);
+        
+        if (Input.GetKey(KeyCode.S)) 
+            transform.position += new Vector3(0, -speed, 0);
+        
+        if (Input.GetKey(KeyCode.D)) 
+            transform.position += new Vector3(speed, 0, 0);
+        
+        if (Input.GetKey(KeyCode.A)) 
+            transform.position += new Vector3(-speed, 0, 0);
+        
         if (Input.GetAxis("Horizontal") < 0)
         {
             GetComponent<SpriteRenderer>().flipX = false;
